@@ -25,22 +25,18 @@ router.get('/:id', async (req, res) => {
     const project = await db('projects')
       .where('id', req.params.id)
       .first();
-
-    // <boolean 0 or 1> ---> true or false
-    project.completed
-      ? (project.completed = true)
-      : (project.completed = false);
-
-    // actions by project_id
     const actions = await db('actions').where('project_id', req.params.id);
 
-    // cleans boolean flag like at line 29 but for array of actions
+    // <boolean 0 or 1> ---> true or false
+    project.completed = Boolean(project.completed);
+
+    // cleans boolean flag like at line 30 but for array of actions and cleans out project_id
     actions.map(i => {
       delete i.project_id;
-      i.completed ? (i.completed = true) : (i.completed = false);
+      i.completed = Boolean(i.completed);
     });
 
-    // spreads in projeact, and actions into single object
+    // spreads in project, and actions into single object
     res.status(200).json({ ...project, actions });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving the project.' });

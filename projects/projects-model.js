@@ -11,11 +11,7 @@ function get() {
 }
 
 function getProject(id) {
-  return db('projects')
-    .join('actions', {
-      'projects.id': 'actions.project_id'
-    })
-    .first();
+  return db('projects');
 }
 
 function addProject(project) {
