@@ -25,9 +25,13 @@ router.get('/:id', async (req, res) => {
     const project = await db('projects')
       .where('id', req.params.id)
       .first();
+    project['completed']
+      ? (project['completed'] = true)
+      : (project['completed'] = false);
     const actions = await db('actions').where('project_id', req.params.id);
     for (i of actions) {
       delete i['project_id'];
+      i['completed'] ? (i['completed'] = true) : (i['completed'] = false);
     }
 
     res.status(200).json({ ...project, actions });
