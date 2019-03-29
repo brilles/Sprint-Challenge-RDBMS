@@ -64,6 +64,21 @@ router.post('/', async (req, res) => {
   }
 });
 
+// update project
+router.put('/:id', async (req, res) => {
+  try {
+    const project = await Projects.updateProject(req.params.id, req.body);
+    project
+      ? res.status(201).json(project)
+      : res.status(404).json({ message: 'The project could not be found.' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Error updating project.'
+    });
+  }
+});
+
 // delete project
 router.delete('/:id', async (req, res) => {
   try {
