@@ -11,7 +11,9 @@ function get() {
 }
 
 function getProject(id) {
-  return db('projects');
+  return db('projects')
+    .where({ id })
+    .first();
 }
 
 function addProject(project) {

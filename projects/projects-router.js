@@ -1,6 +1,8 @@
 const express = require('express');
 
 const Projects = require('./projects-model.js');
+const Actions = require('../actions/actions-model.js');
+
 const db = require('../data/dbConfig.js');
 const router = express.Router();
 
@@ -21,11 +23,26 @@ router.get('/', async (req, res) => {
 
 // get project by id
 router.get('/:id', async (req, res) => {
+  // try {
+  //   const project = await db('projects')
+  //     .where('id', req.params.id)
+  //     .first();
+  //   const actions = await db('actions').where('project_id', req.params.id);
+  //   // <boolean 0 or 1> ---> true or false
+  //   project.completed = Boolean(project.completed);
+  //   // cleans boolean flag like at line 30 but for array of actions and cleans out project_id
+  //   actions.map(i => {
+  //     delete i.project_id;
+  //     i.completed = Boolean(i.completed);
+  //   });
+  //   // spreads in project, and actions into single object
+  //   res.status(200).json({ ...project, actions });
+  // } catch (error) {
+  //   res.status(500).json({ message: 'Error retrieving the project.' });
+  // }
   try {
-    const project = await db('projects')
-      .where('id', req.params.id)
-      .first();
-    const actions = await db('actions').where('project_id', req.params.id);
+    const project = await Projects.getProject(req.params.id);
+    const actions = await Actions.getActions(req.params.id);
 
     // <boolean 0 or 1> ---> true or false
     project.completed = Boolean(project.completed);
@@ -36,7 +53,6 @@ router.get('/:id', async (req, res) => {
       i.completed = Boolean(i.completed);
     });
 
-    // spreads in project, and actions into single object
     res.status(200).json({ ...project, actions });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving the project.' });
