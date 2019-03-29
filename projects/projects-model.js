@@ -16,10 +16,6 @@ function getProject(id) {
     .first();
 }
 
-// function addAction(action) {
-
-// }
-
 function addProject(project) {
   return db('projects')
     .insert(project)
