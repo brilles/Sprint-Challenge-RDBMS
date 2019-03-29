@@ -30,7 +30,7 @@ router.get('/:id', async (req, res) => {
       delete i['project_id'];
     }
 
-    res.status(200).json({ project, actions });
+    res.status(200).json({ ...project, actions });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving the project.' });
   }
