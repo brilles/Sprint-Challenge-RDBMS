@@ -1,7 +1,7 @@
 const express = require('express');
 
 const Projects = require('./projects-model.js');
-
+const db = require('../data/dbConfig.js');
 const router = express.Router();
 
 // /api/projects
@@ -22,8 +22,15 @@ router.get('/', async (req, res) => {
 // get project by id
 router.get('/:id', async (req, res) => {
   try {
-    const project = await Projects.getProject(req.params.id);
-    res.status(200).json(project);
+    const project = await db('projects')
+      .where('id', req.params.id)
+      .first();
+    const actions = await db('actions').where('project_id', req.params.id);
+    for (i of actions) {
+      delete i['project_id'];
+    }
+
+    res.status(200).json({ project, actions });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving the project.' });
   }
