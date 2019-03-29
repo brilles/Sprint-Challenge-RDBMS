@@ -1,4 +1,4 @@
-const server = require('./data/server.js');
+const server = require('./api/server.js');
 
 const port = 5500;
 
